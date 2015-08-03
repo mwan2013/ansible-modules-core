@@ -77,11 +77,12 @@ Else {
 }
 if ($params.md5) {
     $dest_md5 = Get-FileCheckSum($dest)
-    if ($params.md5.Equals($dest_md5) {
+    $params_md5 = $params.md5
+    if ($params_md5.Equals($dest_md5) {
         Set-Attr $result.win_get_url "md5" $dest_md5
     }
     else {
-        Fail-Json $result "src md5 $params.md5 did not match dest_md5 $dest_md5. Failed to place file in $dest"
+        Fail-Json $result "src md5 $params_md5 did not match dest_md5 $dest_md5. Failed to place file in $dest"
     }
 $result.changed = $true
 
