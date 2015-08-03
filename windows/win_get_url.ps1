@@ -84,7 +84,9 @@ if ($params.md5) {
     else {
         Fail-Json $result "src md5 $params_md5 did not match dest_md5 $dest_md5. Failed to place file in $dest"
     }
+}
 $result.changed = $true
+
 
 
 Set-Attr $result.win_get_url "url" $url
