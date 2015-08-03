@@ -47,7 +47,7 @@ If ($force -or -not (Test-Path $dest)) {
 
     Try {
         $client.DownloadFile($url, $dest)
-        $result.changed = $true
+        
     }
     Catch {
         Fail-Json $result "Error downloading $url to $dest"
@@ -64,7 +64,7 @@ Else {
         
         $stream.ReadToEnd() | Set-Content -Path $dest -Force -ErrorAction Stop
         
-        $result.changed = $true
+        
     }
     Catch [System.Net.WebException] {
         If ($_.Exception.Response.StatusCode -ne [System.Net.HttpStatusCode]::NotModified) {
@@ -75,6 +75,16 @@ Else {
         Fail-Json $result "Error downloading $url to $dest"
     }
 }
+if ($params.md5) {
+    $dest_md5 = Get-FileCheckSum($dest)
+    if ($params.md5.Equals($dest_md5) {
+        Set-Attr $result.win_get_url "md5" $dest_md5
+    }
+    else {
+        Fail-Json $result "src md5 $params.md5 did not match dest_md5 $dest_md5. Failed to place file in $dest"
+    }
+$result.changed = $true
+
 
 Set-Attr $result.win_get_url "url" $url
 Set-Attr $result.win_get_url "dest" $dest
